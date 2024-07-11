@@ -15,18 +15,8 @@ resource "proxmox_vm_qemu" "control-plane" {
     sockets  = 1
     cpu      = "host"
     memory   = 2048
-    # scsihw   = "virtio-scsi-pci"
-    bootdisk = "virtio0"
-    scsihw   = "lsi"
     boot     = "order=virtio0"
     disks {
-        ide {
-            ide3 {
-                cloudinit {
-                    storage = "nvme"
-                }
-            }
-        }
         virtio {
             virtio0 {
                 disk {
@@ -102,23 +92,15 @@ resource "proxmox_vm_qemu" "worker" {
     sockets  = 1
     cpu      = "host"
     memory   = 2048
-    scsihw   = "virtio-scsi-pci"
-    boot     = "order=scsi0"
+    boot     = "order=virtio0"
     disks {
-        ide {
-            ide3 {
-                cloudinit {
-                    storage = "nvme"
-                }
-            }
-        }
         virtio {
             virtio0 {
                 disk {
                     size            = 10
                     storage         = "nvme"
                     iothread        = true
-                    discard         = true
+                    #discard         = true
                 }
             }
         }
